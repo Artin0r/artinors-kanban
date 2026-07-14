@@ -268,7 +268,7 @@ export function exportBoardAsTrelloJSON(board: Board, name?: string): void {
 function downloadFile(filename: string, content: string, mimeType: string): void {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  const doc = (typeof window !== "undefined" && (window as typeof window & { activeDocument?: Document }).activeDocument) || document;
+  const doc = (typeof window !== "undefined" && window.activeDocument) || document;
   const a = doc.createElement("a");
   a.href = url;
   a.download = filename;
@@ -515,7 +515,7 @@ export function importBoardFromTrelloJSON(board: Board, text: string): void {
       }
 
       const trelloCard: Card = {
-        id: (typeof card.id === "string" ? card.id : generateId()),
+        id: (typeof (card as Record<string, unknown>).id === "string" ? (card as Record<string, unknown>).id as string : generateId()),
         title,
         checked,
         body,
