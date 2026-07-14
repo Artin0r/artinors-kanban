@@ -194,7 +194,6 @@ Embed a live board in any note with a kanban code block:
 
 - TypeScript + esbuild
 - Svelte 5 (runes mode) for the reactive UI
-- js-yaml for frontmatter parsing
 
 ---
 ## License
