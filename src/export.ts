@@ -268,7 +268,7 @@ export function exportBoardAsTrelloJSON(board: Board, name?: string): void {
 function downloadFile(filename: string, content: string, mimeType: string): void {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  const doc = typeof window !== "undefined" ? (window.activeDocument || document) : document;
+  const doc = (typeof window !== "undefined" && (window as any).activeDocument) || document;
   const a = doc.createElement("a");
   a.href = url;
   a.download = filename;
@@ -414,11 +414,6 @@ function parseCSVChecklist(raw: string): ChecklistItem[] {
 
 
 
-interface TrelloCustomField {
-  name?: string;
-  value?: string;
-}
-
 interface TrelloCard {
   id?: string;
   name?: string;
@@ -438,11 +433,6 @@ interface TrelloCard {
   }>;
 }
 
-interface TrelloList {
-  name?: string;
-  cards?: TrelloCard[];
-}
-
 interface TrelloBoardData {
   lists: Array<{
     name: string;
@@ -452,8 +442,8 @@ interface TrelloBoardData {
       due: string;
       dueComplete: boolean;
       labels: string[];
-      checklists: any[];
-      customFields: any[];
+      checklists: Array<{ checkItems?: Array<{ name?: string; state?: string }> }>;
+      customFields: Array<{ name?: string; value?: string | number }>;
     }>;
   }>;
   labels: Array<{ id: string; name: string }>;
@@ -461,7 +451,7 @@ interface TrelloBoardData {
 
 function parseTrelloData(text: string): TrelloBoardData | null {
   try {
-    const raw = JSON.parse(text) as TrelloBoardData | unknown;
+    const raw = JSON.parse(text) as TrelloBoardData | null;
     return typeof raw === "object" && raw !== null ? (raw as TrelloBoardData) : null;
   } catch {
     return null;
@@ -537,14 +527,14 @@ export function importBoardFromTrelloJSON(board: Board, text: string): void {
       for (const cl of card.checklists || []) {
         for (const item of cl.checkItems || []) {
           checklist.push({
-            text: item.name || "",
+            text: String(item.name || ""),
             checked: item.state === "complete",
           });
         }
       }
 
       const trelloCard: Card = {
-        id: card.id || generateId(),
+        id: (typeof card.id === "string" ? card.id : generateId()),
         title,
         checked,
         body,

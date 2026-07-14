@@ -92,7 +92,7 @@ export default class AdvancedKanbanPlugin extends Plugin {
 
   async loadSettings(): Promise<void> {
     const loaded = (await this.loadData()) as Partial<AdvancedKanbanSettings> | null;
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded ?? {}) as AdvancedKanbanSettings;
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, loaded ?? {});
     if (!this.settings.lastOpenTimes) this.settings.lastOpenTimes = {};
 
     

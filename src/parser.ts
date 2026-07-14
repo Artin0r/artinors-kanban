@@ -34,7 +34,7 @@ export function parseBoard(content: string, defaultName = "Untitled board"): Boa
   const fmMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   if (fmMatch) {
     try {
-      const parsed = parseYaml(fmMatch[1]);
+      const parsed = parseYaml(fmMatch[1]) as Record<string, unknown>;
       if (parsed && typeof parsed === "object") {
         frontmatter = parsed as ParsedFrontmatter;
       }

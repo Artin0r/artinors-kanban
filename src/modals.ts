@@ -131,7 +131,7 @@ export class PromptModal extends Modal {
   }
 
   onOpen() {
-    super.onOpen();
+    void super.onOpen();
     window.setTimeout(() => this.inputEl.focus(), 50);
   }
 

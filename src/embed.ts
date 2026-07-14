@@ -1,6 +1,4 @@
 import {
-  type App,
-  type Component as ObsidianComponent,
   type MarkdownPostProcessorContext,
   MarkdownRenderChild,
   TFile,

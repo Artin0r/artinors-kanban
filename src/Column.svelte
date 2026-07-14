@@ -220,9 +220,9 @@
         closeSortMenu();
       }
     };
-    document.addEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handler, { capture: true });
     return () => {
-      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("mousedown", handler, { capture: true });
       closeTemplateMenu();
       closeSortMenu();
     };

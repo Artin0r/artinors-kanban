@@ -67,7 +67,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
             .setButtonText("Edit")
             .setClass("ak-tpl-edit-btn")
             .onClick(() => {
-              this.editTemplate(t);
+              this.editTemplate(t).catch((err) => console.error("Advanced Kanban: error editing template", err));
             });
         })
         .addButton((btn) => {
@@ -113,7 +113,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
               };
               this.plugin.settings.cardTemplates.push(newTemplate);
               await this.plugin.saveSettings();
-              this.editTemplate(newTemplate);
+              this.editTemplate(newTemplate).catch((err) => console.error("Advanced Kanban: error editing template", err));
             })()
               .catch((err) => console.error("Advanced Kanban: error adding template", err));
           });
@@ -172,7 +172,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           ? row.createEl("textarea", { cls: "ak-template-input", rows })
           : row.createEl("input", { type: "text", value, cls: "ak-template-input" });
         if (rows) (el as HTMLTextAreaElement).value = value;
-        return el as HTMLInputElement | HTMLTextAreaElement;
+        return el;
       };
 
       const makeSelect = (container: HTMLElement, label: string, options: Array<{ v: string; text: string }>, selectedValue: string): HTMLSelectElement => {
@@ -343,34 +343,40 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
       };
       cancelBtn.addEventListener("click", close);
 
-      saveBtn.addEventListener("click", async () => {
-        t.label = (labelInput.value || "Untitled").trim();
-        t.title = titleInput.value.trim();
-        t.body = (bodyInput as HTMLTextAreaElement).value.trim();
-        const rawTags = tagsInput.value
-          .split(/[\s,]+/)
-          .map((x) => x.replace(/^#/, "").trim())
-          .filter(Boolean);
-        t.tags = rawTags;
-        t.due = dueInput.value.trim() || null;
-        t.recur = recurSelect.value
-          ? { interval: recurSelect.value as "daily" | "weekly" | "biweekly" | "monthly" }
-          : null;
-        t.color = colorSelect.value || "";
+      saveBtn.addEventListener("click", () => {
+        (async () => {
+          try {
+            t.label = (labelInput.value || "Untitled").trim();
+            t.title = titleInput.value.trim();
+            t.body = bodyInput.value.trim();
+            const rawTags = tagsInput.value
+              .split(/[\s,]+/)
+              .map((x) => x.replace(/^#/, "").trim())
+              .filter(Boolean);
+            t.tags = rawTags;
+            t.due = dueInput.value.trim() || null;
+            t.recur = recurSelect.value
+              ? { interval: recurSelect.value as "daily" | "weekly" | "biweekly" | "monthly" }
+              : null;
+            t.color = colorSelect.value || "";
 
-        
-        t.fields = fieldsData
-          .map((f) => ({ name: String(f.name || "").trim(), value: String(f.value || "").trim() }))
-          .filter((f) => f.name || f.value);
+            
+            t.fields = fieldsData
+              .map((f) => ({ name: String(f.name || "").trim(), value: String(f.value || "").trim() }))
+              .filter((f) => f.name || f.value);
 
-        
-        t.checklist = clData
-          .map((i) => ({ text: String(i.text || "").trim(), checked: !!i.checked }))
-          .filter((i) => i.text);
+            
+            t.checklist = clData
+              .map((i) => ({ text: String(i.text || "").trim(), checked: !!i.checked }))
+              .filter((i) => i.text);
 
-        await this.plugin.saveSettings();
-        this.display();
-        close();
+            await this.plugin.saveSettings();
+            this.display();
+            close();
+          } catch (e) {
+            console.error("Advanced Kanban: error saving tag", e);
+          }
+        })();
       });
 
       modal.open();
