@@ -1,0 +1,10 @@
+{
+  "id": "aa-kanban",
+  "name": "Artin0rs Advanced Kanban",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "ArtinŌr's Advanced Kanban, A powerful kanban board. Markdown-backed boards with drag & drop, due dates, tags, WIP limits, checklists, note links, archive, search/filter and multiple boards.",
+  "author": "ArtinŌr",
+  "authorUrl": "https://github.com/Artin0r",
+  "isDesktopOnly": false
+}
