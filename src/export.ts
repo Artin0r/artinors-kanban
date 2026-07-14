@@ -268,7 +268,7 @@ export function exportBoardAsTrelloJSON(board: Board, name?: string): void {
 function downloadFile(filename: string, content: string, mimeType: string): void {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  const doc = (typeof window !== "undefined" && (window as any).activeDocument) || document;
+  const doc = (typeof window !== "undefined" && (window as typeof window & { activeDocument?: Document }).activeDocument) || document;
   const a = doc.createElement("a");
   a.href = url;
   a.download = filename;
@@ -414,25 +414,6 @@ function parseCSVChecklist(raw: string): ChecklistItem[] {
 
 
 
-interface TrelloCard {
-  id?: string;
-  name?: string;
-  desc?: string;
-  due?: string;
-  dueComplete?: boolean;
-  labels?: string[];
-  checklists?: Array<{
-    checkItems?: Array<{
-      name?: string;
-      state?: string;
-    }>;
-  }>;
-  customFields?: Array<{
-    name: string;
-    value: string | number;
-  }>;
-}
-
 interface TrelloBoardData {
   lists: Array<{
     name: string;
@@ -452,7 +433,7 @@ interface TrelloBoardData {
 function parseTrelloData(text: string): TrelloBoardData | null {
   try {
     const raw = JSON.parse(text) as TrelloBoardData | null;
-    return typeof raw === "object" && raw !== null ? (raw as TrelloBoardData) : null;
+    return typeof raw === "object" && raw !== null ? raw : null;
   } catch {
     return null;
   }

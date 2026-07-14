@@ -344,7 +344,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
       cancelBtn.addEventListener("click", close);
 
       saveBtn.addEventListener("click", () => {
-        (async () => {
+        void (async () => {
           try {
             t.label = (labelInput.value || "Untitled").trim();
             t.title = titleInput.value.trim();

@@ -78,7 +78,7 @@ export function createBoardStore(
     dirty = true;
     if (paused) return;
     if (saveTimer) window.clearTimeout(saveTimer);
-    saveTimer = window.setTimeout(() => flushSave().catch(console.error), 300);
+    saveTimer = window.setTimeout(() => { void flushSave().catch(console.error); }, 300);
   }
 
   async function flushSave() {

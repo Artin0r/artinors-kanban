@@ -36,7 +36,7 @@ export function parseBoard(content: string, defaultName = "Untitled board"): Boa
     try {
       const parsed = parseYaml(fmMatch[1]) as Record<string, unknown>;
       if (parsed && typeof parsed === "object") {
-        frontmatter = parsed as ParsedFrontmatter;
+        frontmatter = parsed;
       }
     } catch {
       // ignore: malformed frontmatter, fall back to parsing body
