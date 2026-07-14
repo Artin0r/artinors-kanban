@@ -1,6 +1,8 @@
-# ArtinOr's Advanced Kanban
+# ArtinŌr's Advanced Kanban
 
 A markdown‑backed kanban board for Obsidian. Boards are stored as plain Markdown, editable by hand, safe to diff, and still feel like a real Trello‑style app when opened.
+
+<img width="1652" height="709" alt="Showcase" src="https://github.com/user-attachments/assets/6625820b-0a48-4684-928b-42eaa141316b" />
 
 ---
 ## Features
