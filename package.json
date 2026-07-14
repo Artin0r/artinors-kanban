@@ -1,7 +1,7 @@
 {
   "name": "artinors-kanban",
   "version": "1.0.0",
-  "description": "Artinors Advanced Kanban - A powerful kanban board.",
+  "description": "ArtinOrs Advanced Kanban - A powerful kanban board.",
   "main": "main.js",
   "type": "module",
   "scripts": {
