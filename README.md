@@ -2,8 +2,7 @@
 
 A markdown‑backed kanban board for Obsidian. Boards are stored as plain Markdown, editable by hand, safe to diff, and still feel like a real Trello‑style app when opened.
 
-<img width="1200" height="515" alt="Showcase" src="https://github.com/user-attachments/assets/9c3d6900-18eb-47a8-adf0-a25cb5070cd3" />
-
+<img src="https://github.com/user-attachments/assets/9c3d6900-18eb-47a8-adf0-a25cb5070cd3" style="max-width: 100%; height: auto;" alt="Showcase" />
 
 ---
 ## Features
