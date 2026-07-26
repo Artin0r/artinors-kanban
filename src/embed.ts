@@ -63,6 +63,8 @@ export class KanbanRenderChild extends MarkdownRenderChild {
       try {
         unmount(this.component).catch(() => {});
       } catch {
+        // unmount error intentionally ignored during unload
+        return;
       }
       this.component = null;
     }

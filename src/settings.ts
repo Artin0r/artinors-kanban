@@ -43,7 +43,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           s.boardFolder = v;
           await this.plugin.saveSettings();
         },
-      },
+      } as SettingDefinition,
       {
         id: "autoMoveOnComplete",
         name: "Auto-move cards on complete",
@@ -54,7 +54,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           s.autoMoveOnComplete = v;
           await this.plugin.saveSettings();
         },
-      },
+      } as SettingDefinition,
       {
         id: "autoMoveTargetColumn",
         name: "Target column name",
@@ -65,7 +65,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           s.autoMoveTargetColumn = v.trim();
           await this.plugin.saveSettings();
         },
-      },
+      } as SettingDefinition,
     ];
   }
 

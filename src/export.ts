@@ -122,7 +122,7 @@ export function exportBoardAsCSV(board: Board, name?: string): void {
   const lines: string[] = [header.join(",")];
 
   for (const col of board.columns) {
-    
+
     lines.push(buildColumnMarkerRow(col.name));
     for (const card of col.cards) {
       lines.push(buildCSVRow(card, col.name));
@@ -161,13 +161,13 @@ function buildCSVRow(card: Card, columnName: string): string {
     esc(card.color || ""),
     esc(
       card.fields
-        .map((f) => (f.name ? `${f.name}=${f.value}` : f.value))
-        .join("; ")
+      .map((f) => (f.name ? `${f.name}=${f.value}` : f.value))
+      .join("; ")
     ),
     esc(
       card.checklist
-        .map((i) => (i.checked ? "☑" : "☐") + " " + i.text)
-        .join("; ")
+      .map((i) => (i.checked ? "☑" : "☐") + " " + i.text)
+      .join("; ")
     ),
     esc(card.body || ""),
   ];
@@ -211,51 +211,51 @@ export function exportBoardAsTrelloJSON(board: Board, name?: string): void {
     desc: "",
     id: boardId,
     lists: board.columns
-      .map((col) => ({
-        id: col.id,
-        name: col.name,
-        closed: false,
-        cards: col.cards.map((card) => {
-          const labels = (card.tags || [])
-            .map((t) => labelMap[t]?.id)
-            .filter(Boolean);
+    .map((col) => ({
+      id: col.id,
+      name: col.name,
+      closed: false,
+      cards: col.cards.map((card) => {
+        const labels = (card.tags || [])
+        .map((t) => labelMap[t]?.id)
+        .filter(Boolean);
 
-          const checklists: { id: string; name: string; checkItems: { id: string; name: string; state: string }[] }[] = [];
-          if (card.checklist?.length) {
-            checklists.push({
-              id: `cl-${card.id}`,
-              name: "Checklist",
-              checkItems: card.checklist.map((item, i) => ({
-                id: `cl-${card.id}-item-${i}`,
-                name: item.text,
-                state: item.checked ? "complete" : "open",
-              })),
-            });
-          }
+        const checklists: { id: string; name: string; checkItems: { id: string; name: string; state: string }[] }[] = [];
+        if (card.checklist?.length) {
+          checklists.push({
+            id: `cl-${card.id}`,
+            name: "Checklist",
+            checkItems: card.checklist.map((item, i) => ({
+              id: `cl-${card.id}-item-${i}`,
+              name: item.text,
+              state: item.checked ? "complete" : "open",
+            })),
+          });
+        }
 
-          const customFields: Array<{ name: string; value: string }> = [];
-          if (card.color) {
-            customFields.push({ name: "Color", value: card.color });
-          }
-          if (card.recur?.interval) {
-            customFields.push({ name: "Repeats", value: card.recur.interval });
-          }
+        const customFields: Array<{ name: string; value: string }> = [];
+        if (card.color) {
+          customFields.push({ name: "Color", value: card.color });
+        }
+        if (card.recur?.interval) {
+          customFields.push({ name: "Repeats", value: card.recur.interval });
+        }
 
-          return {
-            id: card.id,
-            name: card.title,
-            desc: card.body || "",
-            due: card.due || undefined,
-            dueComplete: card.checked || false,
-            labels: labels.length ? labels : undefined,
-            url: "",
-            idList: col.id,
-            idBoard: boardId,
-            checklists: checklists.length ? checklists : undefined,
-            customFields: customFields.length ? customFields : undefined,
-          };
-        }),
-      })),
+        return {
+          id: card.id,
+          name: card.title,
+          desc: card.body || "",
+          due: card.due || undefined,
+          dueComplete: card.checked || false,
+          labels: labels.length ? labels : undefined,
+          url: "",
+          idList: col.id,
+          idBoard: boardId,
+          checklists: checklists.length ? checklists : undefined,
+          customFields: customFields.length ? customFields : undefined,
+        };
+      }),
+    })),
     labels: Object.values(labelMap),
   };
 
@@ -300,7 +300,7 @@ export function importBoardFromCSV(board: Board, text: string): void {
   const iChecklist = idx("Checklist");
   const iBody = idx("Body");
 
-  
+
   board.columns = [];
 
   const columnMap = new Map<string, typeof board.columns[0]>();
@@ -310,14 +310,14 @@ export function importBoardFromCSV(board: Board, text: string): void {
     const rawLine = lines[r].trim();
     if (!rawLine) continue;
 
-    
-    
-    if (rawLine.startsWith("#")) continue; 
+
+
+    if (rawLine.startsWith("#")) continue;
 
     const row = parseCSVLine(rawLine);
     if (!row || row.length === 0) continue;
 
-    
+
     const cellId = get(row, iId) || "";
     if (cellId.trim() === "__COLUMN__") {
       const colName = (get(row, iTitle) || "").trim();
@@ -353,14 +353,14 @@ export function importBoardFromCSV(board: Board, text: string): void {
     const due = (get(row, iDue) || "").trim() || null;
     const recurRaw = (get(row, iRecur) || "").trim().toLowerCase();
     const recur: RecurConfig | null =
-      ["daily", "weekly", "biweekly", "monthly"].includes(recurRaw)
-        ? { interval: recurRaw as RecurInterval }
-        : null;
+    ["daily", "weekly", "biweekly", "monthly"].includes(recurRaw)
+    ? { interval: recurRaw as RecurInterval }
+    : null;
 
     const tags = (get(row, iTags) || "")
-      .split(/[,;\s]+/)
-      .map((t) => t.replace(/^#/, "").trim())
-      .filter(Boolean);
+    .split(/[,;\s]+/)
+    .map((t) => t.replace(/^#/, "").trim())
+    .filter(Boolean);
 
     const color = (get(row, iColor) || "").trim();
     const fields = parseCSVFields(get(row, iFields) || "");
@@ -387,29 +387,29 @@ export function importBoardFromCSV(board: Board, text: string): void {
 function parseCSVFields(raw: string): CardField[] {
   if (!raw) return [];
   return raw
-    .split(";")
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((s) => {
-      const [name, ...rest] = s.split("=");
-      return {
-        name: name.trim() || "",
-        value: rest.length ? rest.join("=").trim() : "",
-      };
-    });
+  .split(";")
+  .map((s) => s.trim())
+  .filter(Boolean)
+  .map((s) => {
+    const [name, ...rest] = s.split("=");
+    return {
+      name: name.trim() || "",
+       value: rest.length ? rest.join("=").trim() : "",
+    };
+  });
 }
 
 function parseCSVChecklist(raw: string): ChecklistItem[] {
   if (!raw) return [];
   return raw
-    .split(";")
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((s) => {
-      const text = s.replace(/^☑\s*/, "").replace(/^☐\s*/, "").trim();
-      const checked = s.trimStart().startsWith("☑");
-      return { text, checked };
-    });
+  .split(";")
+  .map((s) => s.trim())
+  .filter(Boolean)
+  .map((s) => {
+    const text = s.replace(/^☑\s*/, "").replace(/^☐\s*/, "").trim();
+    const checked = s.trimStart().startsWith("☑");
+    return { text, checked };
+  });
 }
 
 
@@ -450,7 +450,7 @@ export function importBoardFromTrelloJSON(board: Board, text: string): void {
     return acc;
   }, {});
 
-  
+
   board.columns = [];
 
   const columnMap = new Map<string, typeof board.columns[0]>();
@@ -487,7 +487,7 @@ export function importBoardFromTrelloJSON(board: Board, text: string): void {
       const fields: CardField[] = [];
       const checklist: ChecklistItem[] = [];
 
-      
+
       let color = "";
       const recurValues = ["daily", "weekly", "biweekly", "monthly"];
       let recur: RecurConfig | null = null;
@@ -509,7 +509,7 @@ export function importBoardFromTrelloJSON(board: Board, text: string): void {
         for (const item of cl.checkItems || []) {
           checklist.push({
             text: String(item.name || ""),
-            checked: item.state === "complete",
+                         checked: item.state === "complete",
           });
         }
       }

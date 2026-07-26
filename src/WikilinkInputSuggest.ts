@@ -38,9 +38,9 @@ export function createWikilinkSuggest(
     }
 
     if (!popup) {
-      popup = document.createElement("div");
-      popup.className = "suggestion-container ak-wikilink-popup";
-      document.body.appendChild(popup);
+      popup = document.body.createDiv({
+        cls: "suggestion-container ak-wikilink-popup",
+      });
     }
 
     popup.empty();
@@ -164,7 +164,7 @@ export function createWikilinkSuggest(
   }
 
   function onBlur(e: FocusEvent) {
-    activeWindow.setTimeout(() => {
+    window.setTimeout(() => {
       const related = e.relatedTarget as Node | null;
       if (!popup || !related) {
         hidePopup();
