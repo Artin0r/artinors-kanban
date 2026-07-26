@@ -1,7 +1,7 @@
 {
   "id": "artinors-kanban",
   "name": "ArtinOrs Advanced Kanban",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "minAppVersion": "1.4.0",
   "description": "A powerful kanban board. Markdown-backed boards with drag & drop, due dates, tags, WIP limits, checklists, note links, archive, search/filter and multiple boards.",
   "author": "ArtinŌr",
