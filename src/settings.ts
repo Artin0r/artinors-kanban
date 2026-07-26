@@ -1,4 +1,4 @@
-import { App, Modal, PluginSettingTab, Setting } from "obsidian";
+import { App, Modal, PluginSettingTab, Setting, type SettingDefinition, SettingType } from "obsidian";
 import type AdvancedKanbanPlugin from "./main";
 import { DEFAULT_CARD_TEMPLATES, type CardTemplate } from "./board";
 import { resolveDateShortcut } from "./actions";
@@ -27,6 +27,43 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
   constructor(app: App, plugin: AdvancedKanbanPlugin) {
     super(app, plugin);
     this.plugin = plugin;
+  }
+
+  getSettingDefinitions(): Record<string, SettingDefinition> {
+    const s = this.plugin.settings;
+
+    return {
+      boardFolder: {
+        name: "Board folder",
+        type: SettingType.text,
+        desc: "Folder where new kanban board files are created.",
+        get: () => s.boardFolder ?? "",
+        set: async (v: string) => {
+          s.boardFolder = v;
+          await this.plugin.saveSettings();
+        },
+      },
+      autoMoveOnComplete: {
+        name: "Auto-move cards on complete",
+        type: SettingType.checkbox,
+        desc: "When all checklist items on a card are completed, automatically move the card to the specified column.",
+        get: () => s.autoMoveOnComplete,
+        set: async (v: boolean) => {
+          s.autoMoveOnComplete = v;
+          await this.plugin.saveSettings();
+        },
+      },
+      autoMoveTargetColumn: {
+        name: "Target column name",
+        type: SettingType.text,
+        desc: "Column name to move completed cards to (e.g., Done, Finished).",
+        get: () => s.autoMoveTargetColumn || "",
+        set: async (v: string) => {
+          s.autoMoveTargetColumn = v.trim();
+          await this.plugin.saveSettings();
+        },
+      },
+    };
   }
 
   display(): void {

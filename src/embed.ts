@@ -43,7 +43,7 @@ export class KanbanRenderChild extends MarkdownRenderChild {
     if (!linkMatch) {
       this.containerEl.empty();
       this.containerEl.addClass("advanced-kanban-embed");
-      this.containerEl.createEl("div", {
+      this.containerEl.createDiv({
         cls: "ak-embed-hint",
         text: "Forgot to link board? Use: ```kanban [[BoardName]] ```"
       });
@@ -185,7 +185,7 @@ export class KanbanRenderChild extends MarkdownRenderChild {
   private renderError(message: string): void {
     this.containerEl.empty();
     this.containerEl.addClass("advanced-kanban-embed");
-    this.containerEl.createEl("div", {
+    this.containerEl.createDiv({
       cls: "ak-embed-error",
       text: message,
     });
