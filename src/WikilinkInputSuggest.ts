@@ -39,17 +39,12 @@ export function createWikilinkSuggest(
 
     if (!popup) {
       popup = document.createElement("div");
-      popup.className = "suggestion-container";
-      popup.style.position = "fixed";
-      popup.style.zIndex = "9999";
-      popup.style.maxHeight = "260px";
-      popup.style.overflowY = "auto";
-      popup.style.font = "inherit";
+      popup.className = "suggestion-container ak-wikilink-popup";
       document.body.appendChild(popup);
     }
 
     popup.empty();
-    popup.style.display = "block";
+    popup.removeClass("ak-wikilink-hidden");
 
     const itemEls: HTMLElement[] = [];
 
@@ -112,10 +107,10 @@ export function createWikilinkSuggest(
   function positionPopup() {
     if (!popup) return;
     const rect = el.getBoundingClientRect();
-    popup.style.left = rect.left + "px";
-    popup.style.top = rect.bottom + "px";
-    popup.style.minWidth = "200px";
-    popup.style.maxWidth = "280px";
+    popup.setCssStyles({
+      left: rect.left + "px",
+      top: rect.bottom + "px",
+    });
   }
 
   function selectFile(file: TFile) {
@@ -169,7 +164,7 @@ export function createWikilinkSuggest(
   }
 
   function onBlur(e: FocusEvent) {
-    setTimeout(() => {
+    activeWindow.setTimeout(() => {
       const related = e.relatedTarget as Node | null;
       if (!popup || !related) {
         hidePopup();

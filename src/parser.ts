@@ -39,7 +39,6 @@ export function parseBoard(content: string, defaultName = "Untitled board"): Boa
         frontmatter = parsed;
       }
     } catch {
-      // ignore: malformed frontmatter, fall back to parsing body
     }
     body = content.slice(fmMatch[0].length);
   }

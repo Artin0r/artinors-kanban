@@ -29,11 +29,12 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
     this.plugin = plugin;
   }
 
-  getSettingDefinitions(): Record<string, SettingDefinition> {
+  getSettingDefinitions(): Array<SettingDefinition> {
     const s = this.plugin.settings;
 
-    return {
-      boardFolder: {
+    return [
+      {
+        id: "boardFolder",
         name: "Board folder",
         type: SettingType.text,
         desc: "Folder where new kanban board files are created.",
@@ -43,7 +44,8 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         },
       },
-      autoMoveOnComplete: {
+      {
+        id: "autoMoveOnComplete",
         name: "Auto-move cards on complete",
         type: SettingType.checkbox,
         desc: "When all checklist items on a card are completed, automatically move the card to the specified column.",
@@ -53,7 +55,8 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         },
       },
-      autoMoveTargetColumn: {
+      {
+        id: "autoMoveTargetColumn",
         name: "Target column name",
         type: SettingType.text,
         desc: "Column name to move completed cards to (e.g., Done, Finished).",
@@ -63,7 +66,7 @@ export class AdvancedKanbanSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         },
       },
-    };
+    ];
   }
 
   display(): void {
