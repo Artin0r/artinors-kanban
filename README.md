@@ -72,6 +72,12 @@ All in one view. One plugin, zero boilerplate, everything human‑readable.
     - Set card limit
     - Change sort mode
     - Collapse / expand
+- Shortcut Reference Guide:
+	- today: (sets the date to the current day).
+ 	- Tomorrow: tomorrow or tom / +1d (sets the date to one day from now).
+  	- Plus # Days: +3d (adds an exact three day offset from today).
+  	- Next Monday: next mon or mon (jumps to the upcoming Monday).
+  	- End of Month: eom (jumps to the final date of the current month)
 ---
 ## Board file format
 
