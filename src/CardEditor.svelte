@@ -3,6 +3,7 @@
   import type { Card, CardField, ChecklistItem, RecurInterval } from "./board";
   import { DEFAULT_COLORS } from "./board";
   import { iconAction, todayISO, resolveDateShortcut } from "./actions";
+  import { createWikilinkSuggest } from "./WikilinkInputSuggest";
 
   let {
     card,
@@ -24,19 +25,12 @@
   
   
   let title = $state(card.title);
-  
   let body = $state(card.body);
-  
   let due = $state(card.due ?? "");
-
   let recurInterval = $state(card.recur?.interval ?? "");
-  
   let color = $state(card.color);
-  
   let tagsText = $state(card.tags.map((t) => "#" + t).join(" "));
-  
   let fields = $state<CardField[]>(card.fields.map((f) => ({ ...f })));
-  
   let checklist = $state<ChecklistItem[]>(card.checklist.map((i) => ({ ...i })));
 
   const colorKeys = $derived(Object.keys(DEFAULT_COLORS));
@@ -87,6 +81,15 @@
     }
   }
 
+  function attachWikilinkSuggest(node: HTMLInputElement | HTMLTextAreaElement) {
+    const instance = createWikilinkSuggest(app, node);
+    return {
+      destroy() {
+        instance.destroy();
+      },
+    };
+  }
+
   function onDueBlur() {
     if (!due) return;
     const resolved = resolveDateShortcut(due);
@@ -101,17 +104,39 @@
 <div class="ak-editor">
   <div class="ak-editor-row">
     <label for="ak-title">Title</label>
-    <input id="ak-title" type="text" bind:value={title} placeholder="Card title (supports [[wikilinks]])" />
+    <input
+      id="ak-title"
+      type="text"
+      bind:value={title}
+      use:attachWikilinkSuggest
+      placeholder="Card title (supports [[wikilinks]])"
+    />
   </div>
 
   <div class="ak-editor-row">
     <label for="ak-body">Description / body (markdown)</label>
-    <textarea id="ak-body" bind:value={body} rows="4" placeholder="Add notes, [[links]], details…"></textarea>
+    <textarea
+      id="ak-body"
+      bind:value={body}
+      rows="4"
+      use:attachWikilinkSuggest
+      placeholder="Add notes, [[links]], details…"
+    ></textarea>
   </div>
 
   <div class="ak-editor-grid">
     <div class="ak-editor-row">
-      <label for="ak-due">Due date <span class="ak-hint">(today, tom, +3d, next mon, eom)</span></label>
+      <label for="ak-due">
+        Due date
+        <a
+          class="ak-hint"
+          href="https://github.com/Artin0r/artinors-kanban/blob/main/README.md#:~:text=expand-,Shortcut,month,-%29"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          (Shortcuts)
+        </a>
+      </label>
       <input
         id="ak-due"
         type="text"
